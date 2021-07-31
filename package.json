@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=debug webpack serve --config config/webpack.config.babel.js",
-    "test": "npm test"
+    "pretest": "node config/pretest.config.js",
+    "test": "jest --coverage --watch-all"
   },
   "dependencies": {
     "@babel/runtime": "7.14.6",
@@ -40,6 +41,7 @@
     "autoprefixer": "10.3.1",
     "babel": "6.23.0",
     "babel-eslint": "10.1.0",
+    "babel-jest": "27.0.6",
     "babel-loader": "8.2.2",
     "babel-preset": "1.1.7",
     "clean-webpack-plugin": "3.0.0",
