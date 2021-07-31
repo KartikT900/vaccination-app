@@ -27,7 +27,11 @@ function App() {
   }, [loaded]);
 
   return (
-    <div>{!loaded ? 'fetching data now' : JSON.stringify(data)}</div>
+    <div>
+      {!loaded
+        ? 'fetching data now'
+        : `data: ${JSON.stringify(data)}`}
+    </div>
   );
 }
 

@@ -36,5 +36,6 @@ module.exports = {
     '_snapshots_'
   ],
   coverageReporters: ['html'],
-  setupFilesAfterEnv: ['./src/modules/test/setup.js']
+  setupFilesAfterEnv: ['<rootDir>/src/test/setupTest.js'],
+  testEnvironment: 'jsdom'
 };
