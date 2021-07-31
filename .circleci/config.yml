@@ -5,7 +5,7 @@ aliases:
     at: ~/
   - &deps-cache
     keys:
-      - v1-deps-{{ .Branch }}-{{ checksum "package-lock.lock" }}
+      - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
 
 node-env: &node-env
   working_directory: ~/
@@ -26,7 +26,7 @@ jobs:
           command: npm ci
       - save_cache:
           name: Caching dependencies
-          key: v1-deps-{{ .Branch }}-{{ checksum "package-lock.lock" }}
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - .cache
       - persist_to_workspace:
