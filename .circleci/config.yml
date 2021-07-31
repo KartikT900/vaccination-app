@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  setup:
+    docker:
+      - image: cimg/node:15.10.0
+    steps:
+      - checkout
+      - run: node -v
+      - run: npm install
+  test:
+    docker:
+      - image: cimg/node:15.10.0
+    steps:
+      - checkout
+      - run:
+          name: Running tests
+          command: |
+            npm test
+
+workflows:
+  version: 2
+  Setup_And_Test:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+          
