@@ -1,0 +1,19 @@
+{
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "parser": "babel",
+    "tabWidth": 2,
+    "endOfLine": "auto",
+    "printWidth": 70,
+    "overrides": [
+      {
+        "files": "*.scss",
+        "options": {
+          "cursorOffset": -1,
+          "singleQuote": false
+        }
+      }
+    ]
+  }
+  
