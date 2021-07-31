@@ -47,3 +47,15 @@ jobs:
       - run:
           name: Running unit tests
           command: npm test:ci
+
+workflows:
+  version: 2
+  bootstrap-test:
+    jobs:
+      - bootstrap
+      - build:
+          requires:
+            - bootstrap
+      - test-unit:
+          requires:
+            - bootstrap
