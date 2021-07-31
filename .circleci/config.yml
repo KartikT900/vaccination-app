@@ -33,6 +33,12 @@ jobs:
           root: ~/
           paths: 
             - .cache
+  
+  build:
+    <<: *node-env
+    steps:
+      - attach_workspace: *workspace
+      - restore_cache: *deps-cache
 
   test-unit:
     <<: *node-env
