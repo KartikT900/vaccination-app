@@ -52,10 +52,10 @@ workflows:
   version: 2
   bootstrap-test:
     jobs:
-      - bootstrap
+      - setup
       - build:
           requires:
-            - bootstrap
+            - setup
       - test-unit:
           requires:
-            - bootstrap
+            - setup
