@@ -47,7 +47,7 @@ jobs:
       - restore_cache: *deps-cache
       - run:
           name: Running unit tests
-          command: npm test:ci
+          command: npm run test:ci
 
 workflows:
   version: 2
