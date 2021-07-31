@@ -1,29 +1,44 @@
 version: 2.1
 
+aliases:
+  - &workspace
+    at: ~/
+  - &deps-cache
+    keys:
+      - v1-deps-{{ .Branch }}-{{ checksum "package-lock.lock" }}
+
+node-env: &node-env
+  working_directory: ~/
+  docker:
+    - image: cimg/node:15.10.0
+
 jobs:
   setup:
-    docker:
-      - image: cimg/node:15.10.0
+    <<: *node-env
     steps:
       - checkout
-      - run: node -v
-      - run: npm ci --ignore-scripts
-  test:
-    docker:
-      - image: cimg/node:15.10.0
-    steps:
-      - checkout
+      - restore_cache: *deps-cache
       - run:
-          name: Running tests
-          command: |
-            npm run test:ci
+          name: Checking environment
+          command: node --version
+      - run:
+          name: Installing dependencies
+          command: npm ci
+      - save_cache:
+          name: Caching dependencies
+          key: v1-deps-{{ .Branch }}-{{ checksum "package-lock.lock" }}
+          paths:
+            - .cache
+      - persist_to_workspace:
+          root: ~/
+          paths: 
+            - .cache
 
-workflows:
-  version: 2
-  Setup_And_Test:
-    jobs:
-      - setup
-      - test:
-          requires:
-            - setup
-          
+  test-unit:
+    <<: *node-env
+    steps:
+      - attach_workspace: *workspace
+      - restore_cache: *deps-cache
+      - run:
+          name: Running unit tests
+          command: npm test:ci
