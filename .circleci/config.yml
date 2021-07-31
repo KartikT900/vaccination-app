@@ -28,11 +28,11 @@ jobs:
           name: Caching dependencies
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
-            - .cache
+            - node_modules
       - persist_to_workspace:
           root: ~/
           paths: 
-            - .cache
+            - node_modules
   
   build:
     <<: *node-env
