@@ -1,15 +1,21 @@
 import axios from 'axios';
 
-export async function netCall(url, options) {
-  if (!url || typeof url !== 'string') {
+/**
+ *
+ * @param {string} url A string value of the resource that will be fetched
+ * @param {object} options An object listing out various operational parameters required for fetch request to begin
+ * @returns Fetched response
+ */
+export async function netCall(baseUrl, url, options) {
+  if (typeof url !== 'string' || !url) {
     console.error(
-      `Expected baseUrl to be a string. Instead received ${typeof url}`
+      `Expected url to be a string. Instead received ${typeof url}`
     );
 
-    return;
+    return null;
   }
 
-  axios.defaults.baseURL = 'https://cdn-api.co-vin.in/api/v2';
+  axios.defaults.baseURL = baseUrl;
 
   const { method, headers, data } = options;
 
