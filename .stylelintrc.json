@@ -1,5 +1,6 @@
 {
     "extends": "stylelint-config-recommended",
+    "plugins": ["stylelint-prettier"],
     "ignoreFiles": [
       "coverage/*.css"
     ],

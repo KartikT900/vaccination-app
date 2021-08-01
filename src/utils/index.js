@@ -30,3 +30,46 @@ export async function netCall(baseUrl, url, options) {
 
   return response.data;
 }
+
+/**
+ *
+ * @param  {...any} args Input of classNames to be combined
+ *
+ * A simple program that returns a string of joined classNames.
+ * @example
+ * // returns 'test-class test-class2 test-class3'
+ * classnames('test-class', 'test-class2', 'test-class3');
+ */
+
+export const classnames = (...args) => {
+  const classes = args.map((arg) => {
+    if (!arg) {
+      return;
+    } else if (typeof arg === 'number') {
+      throw new Error(`Expected some input`);
+    } else {
+      return arg;
+    }
+  });
+
+  const classArray = classes.reduce((acc, curr) => {
+    if (curr?.constructor === Object) {
+      const classString = Object.values(curr)[0]
+        ? Object.keys(curr)[0]
+        : null;
+
+      acc.push(classString);
+    } else {
+      acc.push(curr);
+    }
+
+    return acc;
+  }, []);
+
+  const joinedClasses = classArray
+    .filter((value) => value)
+    .join(' ')
+    .trim();
+
+  return joinedClasses;
+};
