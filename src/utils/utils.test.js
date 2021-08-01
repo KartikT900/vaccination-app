@@ -45,3 +45,36 @@ describe('netcall', () => {
     mockedServer.close();
   });
 });
+
+describe('classnames', () => {
+  it('returns joined classnames', () => {
+    const classsName = 'test class';
+
+    expect(utils.classnames('test', 'class')).toEqual(classsName);
+  });
+
+  it('handles dynamic object classnames', () => {
+    const classsName = 'test class';
+
+    expect(utils.classnames('test', { ['class']: true })).toEqual(
+      classsName
+    );
+  });
+
+  it('handles multiple dynamic object classnames', () => {
+    const classsName = 'test class class1';
+
+    expect(
+      utils.classnames(
+        'test',
+        { ['class']: true },
+        { ['class1']: true }
+      )
+    ).toEqual(classsName);
+  });
+  it('throws error when input is not a string', () => {
+    expect(() =>
+      utils.classnames('test', { ['class']: true }, 123)
+    ).toThrowError('Expected some input');
+  });
+});
