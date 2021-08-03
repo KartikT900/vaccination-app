@@ -2,35 +2,6 @@
 
 exports[`<App /> renders correctly 1`] = `
 <DocumentFragment>
-  <div
-    class="vcc-header"
-  >
-    <h1
-      class="vcc-header-text"
-    >
-      Vaccine Slot Booking
-    </h1>
-  </div>
-  <div
-    class="vcc-app-container"
-  >
-    <div
-      class="vcc-panel"
-    >
-      <div
-        class="vcc-panel-header"
-        data-testid="panel-header"
-      >
-        Search by Pincode
-      </div>
-      <div
-        class="vcc-panel-body"
-      >
-        <span>
-          Search
-        </span>
-      </div>
-    </div>
-  </div>
+  <mock-app-container />
 </DocumentFragment>
 `;
