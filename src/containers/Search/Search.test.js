@@ -12,6 +12,9 @@ import {
   districtsListBaseUrl
 } from 'hooks/useFetch';
 
+import * as appointmentContext from 'hooks/useAppointmentContext';
+import * as districtListContext from 'hooks/useDistrictListContext';
+
 import * as utils from 'utils';
 
 import Search from 'containers/Search/Search';
@@ -58,6 +61,14 @@ describe('<Search />', () => {
   it('calls fetchData in useFetch hook with correct parameters when By Pin radio is checked', async () => {
     const netCallSpy = jest.spyOn(utils, 'netCall');
 
+    jest
+      .spyOn(appointmentContext, 'useAppointmentContext')
+      .mockImplementation(() => {
+        return {
+          updateAppointments: jest.fn()
+        };
+      });
+
     netCallSpy.mockResolvedValue({ test: 'mocked data' });
 
     render(<Search />);
@@ -77,30 +88,33 @@ describe('<Search />', () => {
 
     expect(netCallSpy).not.toBeCalled();
     expect(searchInput.value).toEqual('123456');
-    expect(
-      screen.queryByText('fetched data by pin')
-    ).not.toBeInTheDocument();
 
     act(() => {
       fireEvent.click(searchButton);
     });
 
-    await waitFor(() => {
-      screen.getByText(JSON.stringify({ test: 'mocked data' }));
-    });
-
-    expect(netCallSpy).toHaveBeenCalledWith(
-      appointmentsBaseUrl,
-      `/findByPin?pincode=123456&date="04-08-2021"`,
-      { method: 'GET' }
-    );
-    expect(screen.getByTestId('api-data')).toHaveTextContent(
-      JSON.stringify({ test: 'mocked data' })
+    await waitFor(() =>
+      expect(netCallSpy).toHaveBeenCalledWith(
+        appointmentsBaseUrl,
+        `/findByPin?pincode=123456&date="04-08-2021"`,
+        { method: 'GET' }
+      )
     );
   });
 
   it('calls fetchData in useFetch hook with correct parameters when By District radio is checked', async () => {
     const netCallSpy = jest.spyOn(utils, 'netCall');
+
+    const useDistrictListContextSpy = jest.spyOn(
+      districtListContext,
+      'useDistrictListContext'
+    );
+
+    useDistrictListContextSpy.mockImplementation(() => {
+      return {
+        updateDistrictList: jest.fn()
+      };
+    });
 
     netCallSpy.mockResolvedValue({ test: 'mocked data' });
 
@@ -129,25 +143,17 @@ describe('<Search />', () => {
 
     expect(netCallSpy).not.toBeCalled();
     expect(searchInput.value).toEqual('123456');
-    expect(
-      screen.queryByText(JSON.stringify({ test: 'mocked data' }))
-    ).not.toBeInTheDocument();
 
     act(() => {
       fireEvent.click(searchButton);
     });
 
-    await waitFor(() => {
-      screen.getByText(JSON.stringify({ test: 'mocked data' }));
-    });
-
-    expect(netCallSpy).toHaveBeenCalledWith(
-      districtsListBaseUrl,
-      `/districts/123456`,
-      { method: 'GET' }
-    );
-    expect(screen.getByTestId('api-data')).toHaveTextContent(
-      JSON.stringify({ test: 'mocked data' })
+    waitFor(() =>
+      expect(netCallSpy).toHaveBeenCalledWith(
+        districtsListBaseUrl,
+        `/districts/123456`,
+        { method: 'GET' }
+      )
     );
   });
 });

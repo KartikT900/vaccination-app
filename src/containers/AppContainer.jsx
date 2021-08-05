@@ -5,6 +5,7 @@ import Panel from 'components/Panel/Panel';
 import Search from 'containers/Search/Search';
 
 export const baseClass = 'vcc-app-container';
+
 function AppContainer() {
   return (
     <>
