@@ -1,9 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 
-function useAppointmentContext(data) {
-  const context = React.createContext({ data, updateData: () => {} });
+const AppointmentsContext = React.createContext();
+const AppointmentsUpdateContext = React.createContext();
 
-  return useContext(context);
+export function useAppointmentContext() {
+  return {
+    appointments: useContext(AppointmentsContext),
+    updateAppointments: useContext(AppointmentsUpdateContext)
+  };
 }
 
-export default useAppointmentContext;
+function AppointmentsProvider({ children }) {
+  const [appointments, setAppointments] = useState(null);
+
+  const updateAppointments = (data) => {
+    setAppointments(data);
+  };
+
+  return (
+    <AppointmentsContext.Provider value={appointments}>
+      <AppointmentsUpdateContext.Provider value={updateAppointments}>
+        {children}
+      </AppointmentsUpdateContext.Provider>
+    </AppointmentsContext.Provider>
+  );
+}
+
+AppointmentsProvider.propTypes = {
+  children: PropTypes.node
+};
+
+export default AppointmentsProvider;

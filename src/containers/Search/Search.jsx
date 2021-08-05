@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import propTypes from 'prop-types';
 
 import useFetch from 'hooks/useFetch';
 
@@ -23,7 +22,7 @@ function Search() {
   const [option, setOption] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [isSearchByDistrict, setIsSearchByDistrict] = useState(false);
-  const { data, fetchData } = useFetch();
+  const { fetchData } = useFetch();
 
   const searchKey = Object.keys(option)[0];
 
@@ -98,7 +97,6 @@ function Search() {
       <div className={`${baseClass}-options`}>
         {renderRadioOptions()}
       </div>
-      <span data-testid="api-data">{JSON.stringify(data)}</span>
     </div>
   );
 }
