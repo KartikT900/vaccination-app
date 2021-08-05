@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { useAppointmentContext } from 'hooks/useAppointmentContext';
+import { useDistrictListContext } from 'hooks/useDistrictListContext';
+
 import { netCall } from 'utils';
 
 export const apiBaseUrl = 'https://cdn-api.co-vin.in/api/v2';
@@ -8,6 +11,17 @@ export const districtsListBaseUrl = `${apiBaseUrl}/admin/location`;
 
 function useFetch() {
   const [data, setData] = useState(null);
+  const { updateDistrictList } = useDistrictListContext();
+  const { updateAppointments } = useAppointmentContext();
+
+  const handleUpdateContext = (type, response) => {
+    if (type === 'appointments') {
+      updateAppointments(response);
+      return;
+    }
+
+    updateDistrictList(response);
+  };
 
   const getBaseUrl = (value) => {
     switch (value) {
@@ -52,6 +66,7 @@ function useFetch() {
     const response = await netCall(baseUrl, url, { method });
 
     setData(response);
+    handleUpdateContext(requestFor, response);
   };
 
   return { data, fetchData };
