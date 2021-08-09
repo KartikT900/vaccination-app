@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const AppointmentsContext = React.createContext();
+export const AppointmentsContext = React.createContext();
 const AppointmentsUpdateContext = React.createContext();
 
 export function useAppointmentContext() {

@@ -45,17 +45,19 @@ describe('<Search />', () => {
 
     expect(screen.getByLabelText('By Pin')).toBeChecked();
     expect(screen.getByLabelText('By District')).not.toBeChecked();
-    expect(
-      screen.queryByText('Please enter State ID')
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toHaveAttribute(
+      'placeholder',
+      'Pincode...'
+    );
 
     fireEvent.click(radioOptions[1]);
 
     expect(screen.getByLabelText('By Pin')).not.toBeChecked();
     expect(screen.getByLabelText('By District')).toBeChecked();
-    expect(
-      screen.getByText('Please enter State ID')
-    ).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toHaveAttribute(
+      'placeholder',
+      'Please enter State Id...'
+    );
   });
 
   it('calls fetchData in useFetch hook with correct parameters when By Pin radio is checked', async () => {
@@ -96,7 +98,7 @@ describe('<Search />', () => {
     await waitFor(() =>
       expect(netCallSpy).toHaveBeenCalledWith(
         appointmentsBaseUrl,
-        `/findByPin?pincode=123456&date="04-08-2021"`,
+        `/findByPin?pincode=123456&date="06-08-2021"`,
         { method: 'GET' }
       )
     );
@@ -120,19 +122,16 @@ describe('<Search />', () => {
 
     render(<Search />);
 
-    const pinRadio = screen.getByLabelText('By District');
+    const districtRadio = screen.getByLabelText('By District');
     const searchInput = screen.getByRole('textbox');
     const searchButton = screen.getByRole('button');
 
-    expect(
-      screen.queryByText('Please enter State ID')
-    ).not.toBeInTheDocument();
+    fireEvent.click(districtRadio);
 
-    fireEvent.click(pinRadio);
-
-    expect(
-      screen.getByText('Please enter State ID')
-    ).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toHaveAttribute(
+      'placeholder',
+      'Please enter State Id...'
+    );
     expect(screen.getByLabelText('By District')).toBeChecked();
 
     fireEvent.change(searchInput, {

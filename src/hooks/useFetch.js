@@ -39,7 +39,7 @@ function useFetch() {
     switch (key) {
       case 'byPin':
         return {
-          url: `/findByPin?pincode=${id}&date="04-08-2021"`,
+          url: `/findByPin?pincode=${id}&date="06-08-2021"`,
           method: 'GET'
         };
       case 'byDistrict':

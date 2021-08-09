@@ -32,7 +32,6 @@ export default {
         exclude: /node_modules/,
         use: ['babel-loader', 'eslint-loader']
       },
-
       {
         test: /\.(sa|sc|c)ss$/,
         exclude: /node_modules/,
@@ -49,6 +48,10 @@ export default {
           },
           'sass-loader'
         ]
+      },
+      {
+        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/i,
+        type: 'asset/resource'
       }
     ]
   },
