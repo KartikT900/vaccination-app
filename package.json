@@ -8,6 +8,7 @@
     "node": "14"
   },
   "scripts": {
+    "build": "cross-env NODE_ENV=production webpack -p --config config/webpack.config.babel.js",
     "start": "cross-env NODE_ENV=debug webpack serve --config config/webpack.config.babel.js",
     "pretest": "node config/pretest.config.js",
     "test": "jest --coverage --watchAll",
