@@ -1,6 +1,29 @@
 .vcc-search {
-  &-options {
+  padding-top: 20px;
+
+  .vcc-panel > .vcc-panel-body {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 769px) {
+    width: 50%;
+
+    .ui.red.label {
+      transform: translate(-270px, -50px);
+    }
+  }
+
+  .ui.red.label {
+    transform: translate(-55px, -2px);
+  }
+
+  &-options {
+    padding-top: 10px;
+
+    .checkbox {
+      padding-right: 10px;
+    }
   }
 }

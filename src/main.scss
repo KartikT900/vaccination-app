@@ -1,8 +1,10 @@
+@import 'semantic-ui-css/semantic.min.css';
 @import url('https://fonts.googleapis.com/css?family=Lato');
 @import 'components/Header/Header';
 @import 'components/Panel/Panel';
 @import 'containers/AppContainer';
 @import 'containers/Search/Search';
+@import 'components/AppointmentsInfo/AppointmentsInfo';
 
 body {
   font-family: "Lato", sans-serif;
