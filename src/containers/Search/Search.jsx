@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Input, Label, Radio } from 'semantic-ui-react';
+
+import Panel from 'components/Panel/Panel';
 
 import useFetch from 'hooks/useFetch';
 
@@ -20,7 +23,12 @@ const radioOptions = [
 
 function Search() {
   const [option, setOption] = useState('');
-  const [searchInput, setSearchInput] = useState('');
+  const [emptyInput, setEmptyInput] = useState({
+    pin: false,
+    state: false
+  });
+  const [searchInput, setSearchInput] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [isSearchByDistrict, setIsSearchByDistrict] = useState(false);
   const { fetchData } = useFetch();
 
@@ -32,6 +40,8 @@ function Search() {
 
   const handleRadioSelection = (target) => {
     const { value, checked } = target;
+
+    setEmptyInput({ pin: false, state: false });
 
     if (value === 'byDistrict' && checked) {
       setIsSearchByDistrict(true);
@@ -54,6 +64,22 @@ function Search() {
   };
 
   const handleSearchClick = async () => {
+    if (
+      searchKey === 'byPin' &&
+      (!searchInput || searchInput.toString(10).length < 6)
+    ) {
+      setEmptyInput({ ...emptyInput, pin: true, state: false });
+      return;
+    } else if (
+      searchKey === 'byDistrict' &&
+      (!searchInput ||
+        searchInput.toString(10).length < 1 ||
+        searchInput.toString(10).length > 2)
+    ) {
+      setEmptyInput({ ...emptyInput, pin: false, state: true });
+      return;
+    }
+
     const options = {
       requestFor:
         searchKey === 'byPin' ? 'appointments' : 'districtList',
@@ -63,6 +89,7 @@ function Search() {
       }
     };
 
+    setEmptyInput(false);
     fetchData(options);
   };
 
@@ -70,16 +97,18 @@ function Search() {
     return (
       <div className={`${baseClass}-radio`}>
         {radioOptions.map((item) => (
-          <label htmlFor={item.id} key={item.key}>
-            <input
-              type="radio"
-              {...item}
-              onChange={handleOnChange}
-              role="radio"
-              aria-checked={searchKey === item.value}
-            />
-            <span>{`By ${item.key}`}</span>
-          </label>
+          <Radio
+            key={item.id}
+            readOnly={false}
+            label={`By ${item.key}`}
+            aria-checked={searchKey === item.value}
+            checked={searchKey === item.value}
+            onChange={handleOnChange}
+            role="radio"
+            id={item.id}
+            value={item.value}
+            name={item.value}
+          />
         ))}
       </div>
     );
@@ -87,16 +116,42 @@ function Search() {
 
   return (
     <div className={baseClass}>
-      <span>
-        {isSearchByDistrict ? 'Please enter State ID' : null}
-      </span>
-      <input type="text" name="searchBox" onChange={handleOnChange} />
-      <button type="button" onClick={handleSearchClick}>
-        Search
-      </button>
-      <div className={`${baseClass}-options`}>
-        {renderRadioOptions()}
-      </div>
+      <Panel header="Search Available Appoinments">
+        <Input
+          className={`${baseClass}-input`}
+          action={{
+            color: 'teal',
+            labelPosition: 'right',
+            content: 'Search',
+            icon: 'search',
+            onClick: handleSearchClick
+          }}
+          actionPosition="right"
+          placeholder={
+            searchKey === 'byPin'
+              ? 'Pincode...'
+              : 'Please enter State Id...'
+          }
+          onChange={handleOnChange}
+          name="searchBox"
+          error={emptyInput.pin || emptyInput.state}
+        />
+        {(emptyInput.pin || emptyInput.state) && (
+          <Label
+            basic
+            color="red"
+            prompt={emptyInput.pin || emptyInput.state}
+            pointing={'below'}
+          >
+            {emptyInput.state &&
+              'State ID should be in range 1 to 28'}
+            {emptyInput.pin && 'Pincode should be 6 digits'}
+          </Label>
+        )}
+        <div className={`${baseClass}-options`}>
+          {renderRadioOptions()}
+        </div>
+      </Panel>
     </div>
   );
 }
