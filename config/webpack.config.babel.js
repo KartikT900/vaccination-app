@@ -5,7 +5,6 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import path from 'path';
 
@@ -84,18 +83,24 @@ export default {
     chunkFilename: '[name].js'
   },
   optimization: {
+    minimize: true,
     concatenateModules: false,
     minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        terserOptions: {
-          nameCache: true,
-          module: true,
-          sourceMap: true,
-          // eslint-disable-next-line camelcase
-          keep_fnames: true
-        }
-      }),
+      (compiler) => {
+        const TerserPlugin = require('terser-webpack-plugin');
+
+        new TerserPlugin({
+          parallel: true,
+          terserOptions: {
+            nameCache: false,
+            module: true,
+            sourceMap: false,
+            mangle: true,
+            // eslint-disable-next-line camelcase
+            keep_fnames: false
+          }
+        }).apply(compiler);
+      },
       new CssMinimizerPlugin({})
     ],
     splitChunks: {
