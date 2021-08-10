@@ -4,8 +4,7 @@
   "description": "A React App that allows users to view available slots for vaccination and check the total vaccination status by State/District.",
   "main": "index.js",
   "engines": {
-    "npm": "7.5.3",
-    "node": "15.10.0"
+    "npm": "7.5.3"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack build --config config/webpack.config.babel.js",
