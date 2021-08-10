@@ -5,10 +5,10 @@
   "main": "index.js",
   "engines": {
     "npm": "7.5.3",
-    "node": "14"
+    "node": "15.10.0"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack -p --config config/webpack.config.babel.js",
+    "build": "cross-env NODE_ENV=production webpack build --config config/webpack.config.babel.js",
     "start": "cross-env NODE_ENV=debug webpack serve --config config/webpack.config.babel.js",
     "pretest": "node config/pretest.config.js",
     "test": "jest --coverage --watchAll",
@@ -85,7 +85,6 @@
     "stylelint-order": "4.1.0",
     "stylelint-prettier": "1.2.0",
     "stylelint-webpack-plugin": "2.2.2",
-    "terser-webpack-plugin": "5.1.4",
     "webpack": "5.42.0",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.2",
