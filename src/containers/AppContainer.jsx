@@ -50,13 +50,30 @@ function AppContainer({
                     geoError: false
                   })
                 }
-                header="This device/browser does not support location
-            services."
-                content="Ensure location service access is granted."
+                header={
+                  'This device/browser does not support location services.'
+                }
+                content={'Ensure location service access is granted.'}
+              />
+            )}
+          {isGeoEnabled &&
+            !geoDataLoading &&
+            !localeData &&
+            messageVisible.geoError && (
+              <Message
+                negative
+                onDismiss={() =>
+                  setMessageVisible({
+                    ...messageVisible,
+                    geoError: false
+                  })
+                }
+                header={'Failed to fetch location pincode.'}
               />
             )}
           {isGeoEnabled &&
             !isGeoPermissionDenied &&
+            localeData &&
             messageVisible.geoSuccess && (
               <Message
                 positive

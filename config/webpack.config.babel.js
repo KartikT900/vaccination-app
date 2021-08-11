@@ -7,8 +7,14 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import StyleLintPlugin from 'stylelint-webpack-plugin';
 import webpack from 'webpack';
 import path from 'path';
+import dotenv from 'dotenv';
 
 const devMode = process.env.NODE_ENV !== 'production';
+const env = dotenv.config().parsed;
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
 
 export default {
   devServer: {
@@ -55,6 +61,7 @@ export default {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin(envKeys),
     new CleanWebpackPlugin(),
     new StyleLintPlugin({
       configFile: '.stylelintrc.json',
