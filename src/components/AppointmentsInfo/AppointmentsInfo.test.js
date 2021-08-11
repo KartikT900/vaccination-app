@@ -36,4 +36,20 @@ describe('<AppointmentsInfo />', () => {
 
     expect(container.firstChild).toBeNull();
   });
+
+  it('renders no data message when sessions are empty', () => {
+    const providerProps = {
+      value: { sessions: [] }
+    };
+    const { container } = withContextProvider(
+      AppointmentsContext,
+      AppoinmentsInfo,
+      { providerProps }
+    );
+
+    expect(container.firstChild).not.toBeNull();
+    expect(
+      screen.getByText('No slots available. Try another date.')
+    ).toBeInTheDocument();
+  });
 });
