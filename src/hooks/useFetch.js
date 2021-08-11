@@ -34,17 +34,17 @@ function useFetch() {
     }
   };
   const getEndpoint = (searchType) => {
-    const { key, id } = searchType;
+    const { key, id, date } = searchType;
 
     switch (key) {
       case 'byPin':
         return {
-          url: `/findByPin?pincode=${id}&date="06-08-2021"`,
+          url: `/findByPin?pincode=${id}&date=${date}`,
           method: 'GET'
         };
       case 'byDistrict':
         return {
-          url: '/findByDistrict?district_id=512&date=31-03-2021',
+          url: '/findByDistrict?district_id=512&date=${date}',
           method: 'GET'
         };
       case 'district':
