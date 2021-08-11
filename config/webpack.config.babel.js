@@ -97,7 +97,9 @@ export default {
             sourceMap: false,
             mangle: true,
             // eslint-disable-next-line camelcase
-            keep_fnames: false
+            keep_fnames: false,
+            // eslint-disable-next-line camelcase
+            keep_classNames: false
           }
         }).apply(compiler);
       },
