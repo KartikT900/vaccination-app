@@ -183,7 +183,7 @@ function Search() {
             type="date"
             onChange={handleOnChange}
             name="date"
-            aria-label="date"
+            aria-label="Choose slot date"
           />
         </div>
       </Panel>

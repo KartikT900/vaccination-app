@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import { Label, Item, Statistic } from 'semantic-ui-react';
+import { Label, Item, Segment, Statistic } from 'semantic-ui-react';
 
 import Panel from 'components/Panel/Panel';
 
@@ -13,9 +13,17 @@ function AppoinmentsInfo() {
   const { appointments } = useAppointmentContext();
   const { sessions } = appointments || { sessions: [] };
 
-  if (!appointments || sessions.length === 0) {
+  if (!appointments) {
     return null;
   }
+
+  const noSlotsMessage = () =>
+    appointments &&
+    sessions.length === 0 && (
+      <Segment color="red">
+        No slots available. Try another date.
+      </Segment>
+    );
 
   const getVaccineInfo = () =>
     sessions?.reduce((acc, curr) => {
@@ -88,6 +96,7 @@ function AppoinmentsInfo() {
   return (
     <div className={baseClass}>
       <Panel header="Available Appointments">
+        {noSlotsMessage()}
         <Item.Group divided>
           {vaccineAvailable.map((data, index) => (
             <Item key={index} data-testid="item">

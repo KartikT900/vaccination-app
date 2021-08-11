@@ -79,7 +79,7 @@ describe('<Search />', () => {
 
     const pinRadio = screen.getByLabelText('By Pin');
     const searchInput = screen.getByRole('textbox');
-    const dateInput = screen.getByLabelText('date');
+    const dateInput = screen.getByLabelText('Choose slot date');
     const searchButton = screen.getByRole('button');
 
     fireEvent.click(pinRadio);
@@ -137,7 +137,7 @@ describe('<Search />', () => {
 
     const districtRadio = screen.getByLabelText('By District');
     const searchInput = screen.getByRole('textbox');
-    const dateInput = screen.getByLabelText('date');
+    const dateInput = screen.getByLabelText('Choose slot date');
     const searchButton = screen.getByRole('button');
 
     fireEvent.click(districtRadio);
