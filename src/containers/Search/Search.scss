@@ -12,15 +12,30 @@
 
     .ui.red.label {
       transform: translate(-270px, -50px);
+
+      &.no-radio {
+        transform: translate(-120px, 25px);
+      }
     }
   }
 
   .ui.red.label {
     transform: translate(-55px, -2px);
+
+    &.no-radio {
+      transform: translate(-125px, 15px);
+      width: 93px;
+    }
   }
 
   &-options {
-    padding-top: 10px;
+    display: flex;
+    align-items: flex-end;
+    padding-top: 20px;
+
+    @media screen and (min-width: 769px) {
+      align-items: center;
+    }
 
     .checkbox {
       padding-right: 10px;
