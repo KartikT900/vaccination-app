@@ -5,7 +5,7 @@ import tt from '@tomtom-international/web-sdk-services';
 
 import AppContainer from 'containers/AppContainer';
 
-export const TT_SERVICE_API_KEY = 'OTvAnYKu6RAMV5wgmTlafjfyuQFP44QE';
+export const TT_SERVICE_API_KEY = process.env.TT_KEY || 'key';
 
 function App() {
   const [isGeoEnabled, setIsGeoEnabled] = useState(false);
