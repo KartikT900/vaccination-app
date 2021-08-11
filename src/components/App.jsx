@@ -5,9 +5,7 @@ import tt from '@tomtom-international/web-sdk-services';
 
 import AppContainer from 'containers/AppContainer';
 
-// eslint-disable-next-line no-console
-console.log(process);
-export const TT_SERVICE_API_KEY = process.env.TT_KEY || 'key';
+export const TT_SERVICE_API_KEY = 'OTvAnYKu6RAMV5wgmTlafjfyuQFP44QE';
 
 function App() {
   const [isGeoEnabled, setIsGeoEnabled] = useState(false);
