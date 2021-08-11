@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import isEmpty from 'lodash/isEmpty';
 import { Input, Label, Radio } from 'semantic-ui-react';
 
 import Panel from 'components/Panel/Panel';
@@ -24,10 +25,12 @@ const radioOptions = [
 function Search() {
   const [option, setOption] = useState('');
   const [emptyInput, setEmptyInput] = useState({
+    noRadio: false,
     pin: false,
     state: false
   });
   const [searchInput, setSearchInput] = useState(null);
+  const [date, setDate] = useState(new Date());
   // eslint-disable-next-line no-unused-vars
   const [isSearchByDistrict, setIsSearchByDistrict] = useState(false);
   const { fetchData } = useFetch();
@@ -57,6 +60,15 @@ function Search() {
 
       handleSearchInput(value);
       return;
+    } else if (event.target.name === 'date') {
+      // don't judge lol
+      const formattedDate = event.target.value
+        .split('-')
+        .reverse()
+        .join('-');
+
+      setDate(formattedDate);
+      return;
     }
 
     handleRadioSelection(event.target);
@@ -65,8 +77,17 @@ function Search() {
 
   const handleSearchClick = async () => {
     if (
+      isEmpty(option) ||
+      Object.keys(option)?.some((radio) => !option[radio])
+    ) {
+      setEmptyInput({ ...emptyInput, noRadio: true });
+      return;
+    }
+    if (
       searchKey === 'byPin' &&
-      (!searchInput || searchInput.toString(10).length < 6)
+      (!searchInput ||
+        searchInput.toString(10).length < 6 ||
+        searchInput.toString(10).length > 6)
     ) {
       setEmptyInput({ ...emptyInput, pin: true, state: false });
       return;
@@ -85,7 +106,8 @@ function Search() {
         searchKey === 'byPin' ? 'appointments' : 'districtList',
       searchType: {
         key: searchKey === 'byPin' ? 'byPin' : 'district',
-        id: searchInput
+        id: searchInput,
+        date
       }
     };
 
@@ -136,13 +158,20 @@ function Search() {
           name="searchBox"
           error={emptyInput.pin || emptyInput.state}
         />
-        {(emptyInput.pin || emptyInput.state) && (
+        {(emptyInput.pin ||
+          emptyInput.state ||
+          emptyInput.noRadio) && (
           <Label
             basic
+            className={emptyInput.noRadio && 'no-radio'}
             color="red"
-            prompt={emptyInput.pin || emptyInput.state}
-            pointing={'below'}
+            prompt={
+              emptyInput.pin || emptyInput.state || emptyInput.noRadio
+            }
+            pointing={emptyInput.noRadio ? 'below' : 'above'}
           >
+            {emptyInput.noRadio &&
+              'Please select one search option below'}
             {emptyInput.state &&
               'State ID should be in range 1 to 28'}
             {emptyInput.pin && 'Pincode should be 6 digits'}
@@ -150,6 +179,12 @@ function Search() {
         )}
         <div className={`${baseClass}-options`}>
           {renderRadioOptions()}
+          <Input
+            type="date"
+            onChange={handleOnChange}
+            name="date"
+            aria-label="date"
+          />
         </div>
       </Panel>
     </div>

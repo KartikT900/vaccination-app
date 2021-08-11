@@ -24,6 +24,8 @@ describe('<Search />', () => {
     jest.clearAllMocks();
   });
 
+  const searchDate = '2021-08-11';
+
   it('renders correctly', () => {
     render(<Search />);
     const radioOptions = screen.getAllByRole('radio');
@@ -77,10 +79,17 @@ describe('<Search />', () => {
 
     const pinRadio = screen.getByLabelText('By Pin');
     const searchInput = screen.getByRole('textbox');
+    const dateInput = screen.getByLabelText('date');
     const searchButton = screen.getByRole('button');
 
     fireEvent.click(pinRadio);
     expect(screen.getByLabelText('By Pin')).toBeChecked();
+
+    fireEvent.change(dateInput, {
+      target: {
+        value: searchDate
+      }
+    });
 
     fireEvent.change(searchInput, {
       target: {
@@ -90,6 +99,7 @@ describe('<Search />', () => {
 
     expect(netCallSpy).not.toBeCalled();
     expect(searchInput.value).toEqual('123456');
+    expect(dateInput.value).toEqual(searchDate);
 
     act(() => {
       fireEvent.click(searchButton);
@@ -98,7 +108,10 @@ describe('<Search />', () => {
     await waitFor(() =>
       expect(netCallSpy).toHaveBeenCalledWith(
         appointmentsBaseUrl,
-        `/findByPin?pincode=123456&date="06-08-2021"`,
+        `/findByPin?pincode=123456&date=${searchDate
+          .split('-')
+          .reverse()
+          .join('-')}`,
         { method: 'GET' }
       )
     );
@@ -124,6 +137,7 @@ describe('<Search />', () => {
 
     const districtRadio = screen.getByLabelText('By District');
     const searchInput = screen.getByRole('textbox');
+    const dateInput = screen.getByLabelText('date');
     const searchButton = screen.getByRole('button');
 
     fireEvent.click(districtRadio);
@@ -140,8 +154,15 @@ describe('<Search />', () => {
       }
     });
 
+    fireEvent.change(dateInput, {
+      target: {
+        value: searchDate
+      }
+    });
+
     expect(netCallSpy).not.toBeCalled();
     expect(searchInput.value).toEqual('123456');
+    expect(dateInput.value).toEqual(searchDate);
 
     act(() => {
       fireEvent.click(searchButton);
