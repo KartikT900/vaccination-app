@@ -99,7 +99,7 @@ export default {
             // eslint-disable-next-line camelcase
             keep_fnames: false,
             // eslint-disable-next-line camelcase
-            keep_classNames: false
+            keep_classnames: false
           }
         }).apply(compiler);
       },
