@@ -176,4 +176,12 @@ describe('<Search />', () => {
       )
     );
   });
+
+  it('renders correctly when geoLocatedPincode is available', () => {
+    render(<Search geoLocatedPincode={123456} />);
+
+    const searchInput = screen.getByRole('textbox');
+
+    expect(searchInput.value).toEqual('123456');
+  });
 });
