@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import throttle from 'lodash/throttle';
 import { Label, Item, Segment, Statistic } from 'semantic-ui-react';
 
 import Panel from 'components/Panel/Panel';
@@ -12,18 +13,30 @@ export const vaccineNames = ['COVISHIELD', 'COVAXIN', 'SPUTNIK V'];
 function AppoinmentsInfo() {
   const { appointments } = useAppointmentContext();
   const { sessions } = appointments || { sessions: [] };
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  const handleResize = () => {
+    const mql = window.matchMedia('(min-width: 769px)');
+
+    setIsDesktop(mql.matches);
+  };
+
+  const throttledResize = useMemo(
+    () => throttle(handleResize, 250),
+    []
+  );
+
+  useEffect(() => {
+    window.addEventListener('resize', throttledResize);
+
+    return () => {
+      window.removeEventListener('resize', throttledResize);
+    };
+  });
 
   if (!appointments) {
     return null;
   }
-
-  const noSlotsMessage = () =>
-    appointments &&
-    sessions.length === 0 && (
-      <Segment color="red">
-        No slots available. Try another date.
-      </Segment>
-    );
 
   const getVaccineInfo = () =>
     sessions?.reduce((acc, curr) => {
@@ -40,7 +53,7 @@ function AppoinmentsInfo() {
 
       if (
         vaccineNames.includes(vaccine) &&
-        (available_capacity_dose1 > 0 || available_capacity_dose2)
+        (available_capacity_dose1 > 0 || available_capacity_dose2 > 0)
       ) {
         const info = {
           vaccineName: vaccine,
@@ -58,6 +71,14 @@ function AppoinmentsInfo() {
 
       return acc;
     }, []);
+
+  const noSlotsMessage = () =>
+    appointments &&
+    (sessions.length === 0 || getVaccineInfo().length === 0) && (
+      <Segment color="red">
+        No slots available. Try another date.
+      </Segment>
+    );
 
   const vaccineAvailable = getVaccineInfo();
 
@@ -77,10 +98,12 @@ function AppoinmentsInfo() {
         <Statistic.Label>Paid</Statistic.Label>
       </Statistic>
 
-      <Statistic>
-        <Statistic.Value>{`${data.fee}`}</Statistic.Value>
-        <Statistic.Label>Price</Statistic.Label>
-      </Statistic>
+      {isDesktop && (
+        <Statistic>
+          <Statistic.Value>{`${data.fee}`}</Statistic.Value>
+          <Statistic.Label>Price</Statistic.Label>
+        </Statistic>
+      )}
 
       <Statistic>
         <Statistic.Value>

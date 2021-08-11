@@ -2,6 +2,21 @@
 
 exports[`<App /> renders correctly 1`] = `
 <DocumentFragment>
-  <mock-app-container />
+  <div
+    class="vcc-app-container"
+  >
+    <div
+      class="ui active transition visible dimmer"
+      style="display: flex;"
+    >
+      <div
+        class="content"
+      >
+        <div
+          class="ui loader"
+        />
+      </div>
+    </div>
+  </div>
 </DocumentFragment>
 `;
