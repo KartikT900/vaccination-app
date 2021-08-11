@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
 import { Input, Label, Radio } from 'semantic-ui-react';
 
@@ -22,15 +23,16 @@ const radioOptions = [
   }
 ];
 
-function Search() {
+function Search({ geoLocatedPincode }) {
+  const todaysDate = new Date();
   const [option, setOption] = useState('');
   const [emptyInput, setEmptyInput] = useState({
     noRadio: false,
     pin: false,
     state: false
   });
-  const [searchInput, setSearchInput] = useState(null);
-  const [date, setDate] = useState(new Date());
+  const [searchInput, setSearchInput] = useState(geoLocatedPincode);
+  const [date, setDate] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [isSearchByDistrict, setIsSearchByDistrict] = useState(false);
   const { fetchData } = useFetch();
@@ -61,13 +63,7 @@ function Search() {
       handleSearchInput(value);
       return;
     } else if (event.target.name === 'date') {
-      // don't judge lol
-      const formattedDate = event.target.value
-        .split('-')
-        .reverse()
-        .join('-');
-
-      setDate(formattedDate);
+      setDate(event.target.value);
       return;
     }
 
@@ -107,7 +103,14 @@ function Search() {
       searchType: {
         key: searchKey === 'byPin' ? 'byPin' : 'district',
         id: searchInput,
-        date
+        // don't judge lol
+        date: date
+          ? date.split('-').reverse().join('-')
+          : todaysDate
+              .toLocaleString()
+              .split(',')[0]
+              .split('/')
+              .join('-')
       }
     };
 
@@ -154,6 +157,7 @@ function Search() {
               ? 'Pincode...'
               : 'Please enter State Id...'
           }
+          value={searchInput || ''}
           onChange={handleOnChange}
           name="searchBox"
           error={emptyInput.pin || emptyInput.state}
@@ -184,11 +188,27 @@ function Search() {
             onChange={handleOnChange}
             name="date"
             aria-label="Choose slot date"
+            value={
+              date ||
+              todaysDate
+                .toLocaleString()
+                .split(',')[0]
+                .split('/')
+                .reverse()
+                .join('-')
+            }
           />
         </div>
       </Panel>
     </div>
   );
 }
+
+Search.propTypes = {
+  geoLocatedPincode: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ])
+};
 
 export default Search;

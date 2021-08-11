@@ -12,7 +12,7 @@
   .statistic {
     flex-direction: row-reverse;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 30%;
 
     @media screen and (min-width: 769px) {
@@ -25,5 +25,9 @@
   .ui.statistic > .label,
   .ui.statistics .statistic > .label {
     color: #868686;
+  }
+
+  .ui.five.statistics {
+    margin: 0;
   }
 }
