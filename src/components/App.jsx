@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import { hot } from 'react-hot-loader/root';
 
@@ -6,9 +5,8 @@ import tt from '@tomtom-international/web-sdk-services';
 
 import AppContainer from 'containers/AppContainer';
 
-// eslint-disable-next-line no-undef
 // eslint-disable-next-line no-console
-console.log(REACT_APP_TT_KEY);
+console.log(process);
 export const TT_SERVICE_API_KEY = process.env.TT_KEY || 'key';
 
 function App() {
