@@ -43,13 +43,18 @@ function App() {
 
   useEffect(() => {
     async function loadLocaleData() {
-      const arealocaleData = await tt.services.reverseGeocode({
-        key: TT_SERVICE_API_KEY,
-        position: coordinates
-      });
+      try {
+        const arealocaleData = await tt.services.reverseGeocode({
+          key: TT_SERVICE_API_KEY,
+          position: coordinates
+        });
 
-      setAreaLocaleData(arealocaleData);
-      setFetchingGeoData(false);
+        setAreaLocaleData(arealocaleData);
+        setFetchingGeoData(false);
+      } catch (error) {
+        console.error(error);
+        setFetchingGeoData(false);
+      }
     }
 
     if (coordinates && isGeoEnabled) {
