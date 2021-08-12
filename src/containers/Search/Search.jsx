@@ -12,20 +12,22 @@ const radioOptions = [
   {
     id: 'byPin',
     key: 'Pin',
-    name: 'search-by-pin',
+    name: 'searchtype',
     value: 'byPin'
   },
   {
     id: 'byDistrict',
     key: 'District',
-    name: 'search-by-pin',
+    name: 'searchtype',
     value: 'byDistrict'
   }
 ];
 
 function Search({ geoLocatedPincode }) {
   const todaysDate = new Date();
-  const [option, setOption] = useState('');
+  const [option, setOption] = useState({
+    ['byPin']: geoLocatedPincode?.length > 0
+  });
   const [emptyInput, setEmptyInput] = useState({
     noRadio: false,
     pin: false,
@@ -46,7 +48,7 @@ function Search({ geoLocatedPincode }) {
   const handleRadioSelection = (target) => {
     const { value, checked } = target;
 
-    setEmptyInput({ pin: false, state: false });
+    setEmptyInput({ ...emptyInput, pin: false, state: false });
 
     if (value === 'byDistrict' && checked) {
       setIsSearchByDistrict(true);
@@ -68,13 +70,20 @@ function Search({ geoLocatedPincode }) {
     }
 
     handleRadioSelection(event.target);
-    setOption({ [event.target.value]: event.target.checked });
+    const uncheckedRadioKey = Object.keys(option).filter(
+      (key) => key !== event.target.value
+    );
+
+    setOption({
+      [event.target.value]: event.target.checked,
+      [uncheckedRadioKey[0]]: false
+    });
   };
 
   const handleSearchClick = async () => {
     if (
       isEmpty(option) ||
-      Object.keys(option)?.some((radio) => !option[radio])
+      Object.keys(option)?.every((radio) => !option[radio])
     ) {
       setEmptyInput({ ...emptyInput, noRadio: true });
       return;
@@ -127,12 +136,12 @@ function Search({ geoLocatedPincode }) {
             readOnly={false}
             label={`By ${item.key}`}
             aria-checked={searchKey === item.value}
-            checked={searchKey === item.value}
+            checked={option[item.value]}
             onChange={handleOnChange}
             role="radio"
             id={item.id}
             value={item.value}
-            name={item.value}
+            name={item.name}
           />
         ))}
       </div>
