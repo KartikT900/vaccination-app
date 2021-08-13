@@ -47,7 +47,7 @@ describe('<Search />', () => {
 
     expect(screen.getByLabelText('By Pin')).toBeChecked();
     expect(screen.getByLabelText('By District')).not.toBeChecked();
-    expect(screen.getByRole('textbox')).toHaveAttribute(
+    expect(screen.getAllByRole('textbox')[0]).toHaveAttribute(
       'placeholder',
       'Pincode...'
     );
@@ -56,7 +56,7 @@ describe('<Search />', () => {
 
     expect(screen.getByLabelText('By Pin')).not.toBeChecked();
     expect(screen.getByLabelText('By District')).toBeChecked();
-    expect(screen.getByRole('textbox')).toHaveAttribute(
+    expect(screen.getAllByRole('textbox')[0]).toHaveAttribute(
       'placeholder',
       'Please enter State Id...'
     );
@@ -78,8 +78,8 @@ describe('<Search />', () => {
     render(<Search />);
 
     const pinRadio = screen.getByLabelText('By Pin');
-    const searchInput = screen.getByRole('textbox');
-    const dateInput = screen.getByLabelText('Choose slot date');
+    const searchInput = screen.getAllByRole('textbox')[0];
+    const dateInput = screen.getAllByRole('textbox')[1];
     const searchButton = screen.getByRole('button');
 
     fireEvent.click(pinRadio);
@@ -136,13 +136,13 @@ describe('<Search />', () => {
     render(<Search />);
 
     const districtRadio = screen.getByLabelText('By District');
-    const searchInput = screen.getByRole('textbox');
-    const dateInput = screen.getByLabelText('Choose slot date');
+    const searchInput = screen.getAllByRole('textbox')[0];
+    const dateInput = screen.getAllByRole('textbox')[1];
     const searchButton = screen.getByRole('button');
 
     fireEvent.click(districtRadio);
 
-    expect(screen.getByRole('textbox')).toHaveAttribute(
+    expect(screen.getAllByRole('textbox')[0]).toHaveAttribute(
       'placeholder',
       'Please enter State Id...'
     );
@@ -180,7 +180,7 @@ describe('<Search />', () => {
   it('renders correctly when geoLocatedPincode is available', () => {
     render(<Search geoLocatedPincode={123456} />);
 
-    const searchInput = screen.getByRole('textbox');
+    const searchInput = screen.getAllByRole('textbox')[0];
 
     expect(searchInput.value).toEqual('123456');
   });
