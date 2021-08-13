@@ -3,9 +3,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import throttle from 'lodash/throttle';
 import { Label, Item, Segment, Statistic } from 'semantic-ui-react';
 
+import Filters from 'components/Filters/Filters';
 import Panel from 'components/Panel/Panel';
 
 import { useAppointmentContext } from 'hooks/useAppointmentContext';
+
+import { filterDataByKey } from 'utils';
 
 export const baseClass = 'vcc-appointments-info';
 export const vaccineNames = ['COVISHIELD', 'COVAXIN', 'SPUTNIK V'];
@@ -14,29 +17,7 @@ function AppoinmentsInfo() {
   const { appointments } = useAppointmentContext();
   const { sessions } = appointments || { sessions: [] };
   const [isDesktop, setIsDesktop] = useState(false);
-
-  const handleResize = () => {
-    const mql = window.matchMedia('(min-width: 769px)');
-
-    setIsDesktop(mql.matches);
-  };
-
-  const throttledResize = useMemo(
-    () => throttle(handleResize, 250),
-    []
-  );
-
-  useEffect(() => {
-    window.addEventListener('resize', throttledResize);
-
-    return () => {
-      window.removeEventListener('resize', throttledResize);
-    };
-  });
-
-  if (!appointments) {
-    return null;
-  }
+  const [appliedFilters, setAppliedFilters] = useState([]);
 
   const getVaccineInfo = () =>
     sessions?.reduce((acc, curr) => {
@@ -72,15 +53,50 @@ function AppoinmentsInfo() {
       return acc;
     }, []);
 
+  const handleResize = () => {
+    const mql = window.matchMedia('(min-width: 769px)');
+
+    setIsDesktop(mql.matches);
+  };
+
+  const throttledResize = useMemo(
+    () => throttle(handleResize, 250),
+    []
+  );
+
+  useEffect(() => {
+    window.addEventListener('resize', throttledResize);
+
+    return () => {
+      window.removeEventListener('resize', throttledResize);
+    };
+  });
+
+  const handleFilterCheck = (event, { label, checked }) => {
+    if (checked) {
+      setAppliedFilters([...appliedFilters, label?.toLowerCase()]);
+    } else {
+      const updatedFilters = appliedFilters.filter(
+        (item) => item !== label.toLowerCase()
+      );
+
+      setAppliedFilters(updatedFilters);
+    }
+  };
+
+  const filteredData = filterDataByKey(
+    getVaccineInfo(),
+    appliedFilters
+  );
+
   const noSlotsMessage = () =>
     appointments &&
-    (sessions.length === 0 || getVaccineInfo().length === 0) && (
+    (filteredData?.length === 0 ||
+      getVaccineInfo()?.length === 0) && (
       <Segment color="red">
         No slots available. Try another date.
       </Segment>
     );
-
-  const vaccineAvailable = getVaccineInfo();
 
   const renderVaccineAvailability = (data) => (
     <Statistic.Group size="small" widths="5">
@@ -117,32 +133,35 @@ function AppoinmentsInfo() {
   );
 
   return (
-    <div className={baseClass}>
-      <Panel header="Available Appointments">
-        {noSlotsMessage()}
-        <Item.Group divided>
-          {vaccineAvailable.map((data, index) => (
-            <Item key={index} data-testid="item">
-              <Item.Content>
-                <Label
-                  as="a"
-                  href="https://selfregistration.cowin.gov.in"
-                  circular
-                  color="blue"
-                  size="large"
-                >
-                  {data.vaccineName}
-                  <Label.Detail>{data.centre}</Label.Detail>
-                </Label>
-                <Item.Description>
-                  {renderVaccineAvailability(data)}
-                </Item.Description>
-              </Item.Content>
-            </Item>
-          ))}
-        </Item.Group>
-      </Panel>
-    </div>
+    appointments && (
+      <div className={baseClass}>
+        <Panel header="Available Appointments">
+          <Filters handleOnChange={handleFilterCheck} />
+          {noSlotsMessage()}
+          <Item.Group divided>
+            {filteredData?.map((data, index) => (
+              <Item key={index} data-testid="item">
+                <Item.Content>
+                  <Label
+                    as="a"
+                    href="https://selfregistration.cowin.gov.in"
+                    circular
+                    color="blue"
+                    size="large"
+                  >
+                    {data.vaccineName}
+                    <Label.Detail>{data.centre}</Label.Detail>
+                  </Label>
+                  <Item.Description>
+                    {renderVaccineAvailability(data)}
+                  </Item.Description>
+                </Item.Content>
+              </Item>
+            ))}
+          </Item.Group>
+        </Panel>
+      </div>
+    )
   );
 }
 
