@@ -1,0 +1,29 @@
+.vcc-filters {
+  display: flex;
+
+  @media screen and (min-width: 769px) {
+    justify-content: flex-end;
+  }
+
+  .ui.accordion .title:not(.ui) {
+    padding: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+
+  &-option {
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (min-width: 769px) {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .ui.checkbox {
+      padding: 10px;
+    }
+  }
+}
