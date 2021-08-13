@@ -29,5 +29,11 @@
 
   .ui.five.statistics {
     margin: 0;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .value {
+      white-space: nowrap;
+    }
   }
 }
