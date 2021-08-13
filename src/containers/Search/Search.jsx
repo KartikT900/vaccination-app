@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
 import { Input, Label, Radio } from 'semantic-ui-react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import Panel from 'components/Panel/Panel';
 
@@ -64,9 +65,6 @@ function Search({ geoLocatedPincode }) {
 
       handleSearchInput(value);
       return;
-    } else if (event.target.name === 'date') {
-      setDate(event.target.value);
-      return;
     }
 
     handleRadioSelection(event.target);
@@ -78,6 +76,13 @@ function Search({ geoLocatedPincode }) {
       [event.target.value]: event.target.checked,
       [uncheckedRadioKey[0]]: false
     });
+  };
+
+  const handleDayChange = (...args) => {
+    const [, , dayPickerInput] = args;
+    const input = dayPickerInput.getInput();
+
+    setDate(input.value);
   };
 
   const handleSearchClick = async () => {
@@ -192,20 +197,14 @@ function Search({ geoLocatedPincode }) {
         )}
         <div className={`${baseClass}-options`}>
           {renderRadioOptions()}
-          <Input
-            type="date"
-            onChange={handleOnChange}
-            name="date"
-            aria-label="Choose slot date"
-            value={
-              date ||
-              todaysDate
-                .toLocaleString()
-                .split(',')[0]
-                .split('/')
-                .reverse()
-                .join('-')
-            }
+          <DayPickerInput
+            value={date}
+            onDayChange={handleDayChange}
+            placeholder={todaysDate.toLocaleDateString()}
+            inputProps={{
+              name: 'date',
+              ['aria-label']: 'Choose slot date'
+            }}
           />
         </div>
       </Panel>

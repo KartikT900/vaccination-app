@@ -21,7 +21,9 @@ export default {
     port: 8000,
     openPage: 'vaccine/slot/'
   },
-  devtool: devMode ? 'eval-cheap-module-source-map' : 'source-map',
+  devtool: devMode
+    ? 'eval-cheap-module-source-map'
+    : 'cheap-module-source-map',
   entry: ['./src/public-path.js', './src/index.js'],
   mode: devMode ? 'development' : 'production',
   module: {
