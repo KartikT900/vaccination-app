@@ -13,7 +13,7 @@ import data from 'sample/appointments';
 describe('<AppointmentsInfo />', () => {
   it('renders correctly when appointments data is available', () => {
     const providerProps = {
-      value: { sessions: data }
+      value: { sessions: data.sessions }
     };
     const { container } = withContextProvider(
       AppointmentsContext,

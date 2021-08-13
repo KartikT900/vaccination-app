@@ -1,5 +1,6 @@
 .vcc-appointments-info {
   padding-top: 20px;
+  width: 100%;
 
   .ui.items > .item .meta {
     margin: 0 0 20px;
@@ -35,5 +36,9 @@
     .value {
       white-space: nowrap;
     }
+  }
+
+  div.content {
+    border-top: 1px solid grey;
   }
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
 
 /**
  *
@@ -72,4 +73,17 @@ export const classnames = (...args) => {
     .trim();
 
   return joinedClasses;
+};
+
+export const filterDataByKey = (data = [], key) => {
+  if (isEmpty(data)) {
+    return null;
+  } else if (key && key.length === 0) {
+    return data;
+  }
+
+  const checkKeyExists = (item) =>
+    key.includes(item?.vaccineName?.toLowerCase());
+
+  return data?.filter(checkKeyExists);
 };
