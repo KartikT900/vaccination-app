@@ -1,0 +1,21 @@
+{
+    "short_name": "Vaccine Search",
+    "name": "Search for vaccine availability",
+    "icons": [
+      {
+        "src": "./src/images/vaccine-record.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      },
+      {
+        "src": "./src/images/vaccine-record_512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "/vaccine/slot/?source=pwa",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#3367D6"
+}
