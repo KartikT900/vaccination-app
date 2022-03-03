@@ -2,4 +2,5 @@ node_modules
 coverage
 build
 .env
-.DS-Store
+.DS_Store
+.mailmap
